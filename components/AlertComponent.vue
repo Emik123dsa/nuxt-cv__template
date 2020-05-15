@@ -1,6 +1,6 @@
 <template>
   <sui-message
-    v-bind:style="{border: this.$cookies.get('__at-es') ? '1px solid #555 !important' : false}"
+    v-bind:style="{border: activeTheme ? '1px solid #555 !important' : false}"
     attached
     v-if="activeAlert && isActive"
     :class="{inverted: activeTheme}"

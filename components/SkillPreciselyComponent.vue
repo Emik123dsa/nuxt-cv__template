@@ -4,25 +4,25 @@
       <sui-item>
         <h3
           is="sui-header"
-          :class="{inverted: this.$cookie.get('__at-es') === 'true' ? true : false}"
+          :class="{inverted: activeTheme ? true : false}"
         >
           <sui-icon :name="`${skills.name}`" :class="`${skills.color}`" size="big" />
           <sui-header-content
-            :class="{inverted: this.$cookie.get('__at-es') === 'true' ? true : false}"
+            :class="{inverted: activeTheme ? true : false}"
           >
             {{skills.title}}
             <sui-header-subheader
-              :class="{inverted: this.$cookie.get('__at-es') === 'true' ? true : false}"
+              :class="{inverted: activeTheme ? true : false}"
             >{{skills.desc}}</sui-header-subheader>
           </sui-header-content>
         </h3>
       </sui-item>
       <sui-item
-        :style="{'border-top': this.$cookie.get('__at-es') === 'true' && '1px solid rgba(34,36,38,1)' }"
+        :style="{'border-top': activeTheme && '1px solid rgba(34,36,38,1)' }"
       >
         <h3
           is="sui-header"
-          :class="{inverted: this.$cookie.get('__at-es') === 'true' ? true : false}"
+          :class="{inverted: activeTheme ? true : false}"
         >
           <sui-icon name="linux" />
           <sui-header-content>
@@ -32,12 +32,12 @@
         </h3>
       </sui-item>
       <sui-item
-        :style="{'border-top': this.$cookie.get('__at-es') === 'true' && '1px solid rgba(34,36,38,1)' }"
+        :style="{'border-top': activeTheme && '1px solid rgba(34,36,38,1)' }"
       >
         <sui-item-content>
-          <sui-item-description :style="{color: this.$cookie.get('__at-es') === 'true' && '#fff'}">
+          <sui-item-description :style="{color: activeTheme && '#fff'}">
             <p
-              :style="{color: this.$cookie.get('__at-es') === 'true' ? true : false}"
+              :style="{color: activeTheme ? true : false}"
               v-html="skills.about"
             ></p>
           </sui-item-description>
@@ -63,6 +63,14 @@ export default {
   },
   created() {
     this.getSkills();
+  },
+  computed: {
+    activeAlert() {
+      return this.$store?.getters?.alert; 
+    },
+    activeTheme() {
+      return this.$store?.getters?.theme;
+    }
   },
   methods: {
     async getSkills() {
@@ -108,8 +116,7 @@ export default {
 
 <style lang="scss" scoped>
 .webpack {
-  background: url("https://cdn.worldvectorlogo.com/logos/webpack.svg") no-repeat
-    center center;
+  background: url('https://cdn.worldvectorlogo.com/logos/webpack.svg') no-repeat center center;
   background-size: contain;
 }
 </style>

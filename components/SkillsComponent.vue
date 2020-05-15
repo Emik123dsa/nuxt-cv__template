@@ -1,10 +1,6 @@
 <template >
   <div>
-    <h4
-      is="sui-header"
-      dividing
-      v-bind:class="{inverted: this.$cookie.get('__at-es') === 'true' ? true : false}"
-    >
+    <h4 is="sui-header" dividing v-bind:class="{inverted: activeTheme ? true : false}">
       <sui-icon name="jenkins" />
       <sui-header-content>
         Back-End
@@ -19,7 +15,7 @@
         :style="{ animationDelay: 0.1 * i + 's' }"
         @click.native="switchToSkill(card.link)"
       >
-        <sui-card-content >
+        <sui-card-content>
           <div class="right floated">
             <sui-icon :name="`${card.icon}`" :color="`${card.color}`"></sui-icon>
           </div>
@@ -35,25 +31,21 @@
     <div v-else>
       <lazy-card-loading />
     </div>
-    <h4
-      is="sui-header"
-      dividing
-      v-bind:class="{inverted: this.$cookie.get('__at-es') === 'true' ? true : false}"
-    >
+    <h4 is="sui-header" dividing v-bind:class="{inverted: activeTheme ? true : false}">
       <sui-icon name="jenkins" />
       <sui-header-content>
         Front-End
         <sui-header-subheader>Front-End skills</sui-header-subheader>
       </sui-header-content>
     </h4>
-   <sui-card-group :items-per-row="3" class="link" v-if="!loading">
+    <sui-card-group :items-per-row="3" class="link" v-if="!loading">
       <sui-card
         v-for="(card ,i) in frontCards"
         :key="i"
         class="link"
         @click.native="switchToSkill(card.link)"
       >
-        <sui-card-content >
+        <sui-card-content>
           <div class="right floated">
             <sui-icon :name="`${card.icon}`" :color="`${card.color}`"></sui-icon>
           </div>
@@ -69,11 +61,7 @@
     <div v-else>
       <lazy-card-loading />
     </div>
-    <h4
-      is="sui-header"
-      dividing
-      v-bind:class="{inverted: this.$cookie.get('__at-es') === 'true' ? true : false}"
-    >
+    <h4 is="sui-header" dividing v-bind:class="{inverted: activeTheme ? true : false}">
       <sui-icon name="jenkins" />
       <sui-header-content>
         Default
@@ -96,6 +84,7 @@ export default {
       loading: true
     };
   },
+
   metaInfo: {
     title: "Skills"
   },
@@ -103,6 +92,13 @@ export default {
     this.getSkillCards();
   },
   computed: {
+    activeAlert() {
+      return this.$store?.getters?.alert; 
+    },
+    activeTheme() {
+      return this.$store?.getters?.theme;
+    },
+
     frontCards() {
       return this.skill_cards.filter(function(item) {
         return item.parent === "card_front";
@@ -144,8 +140,7 @@ export default {
 }
 
 .webpack {
-  background: url("https://cdn.worldvectorlogo.com/logos/webpack.svg") no-repeat
-    center center;
+  background: url('https://cdn.worldvectorlogo.com/logos/webpack.svg') no-repeat center center;
   background-size: contain;
 }
 

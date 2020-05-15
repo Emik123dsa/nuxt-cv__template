@@ -1,8 +1,8 @@
 <template>
   <sui-menu
     attached="top"
-    :class="{inverted: this.$cookies.get('__at-es') === 'true' ? true : false }"
-    v-bind:style="{border: this.$cookies.get('__at-es') === 'true' ? '1px solid #555 !important' : false}"
+    :class="{inverted: activeTheme ? true : false }"
+    v-bind:style="{border: activeTheme ? '1px solid #555 !important' : '' }"
   >
     <sui-menu-menu position="left">
       <sui-dropdown item icon="cloud blue" simple>
@@ -127,23 +127,23 @@ export default {
       ],
       activeItem: "",
       active_item: "",
-      value: this.$cookies.get("__at-es"),
+      value: "",
       active: false
     };
   },
-  computed: {},
+  computed: {
+    activeTheme() {
+      return this.$store?.getters?.theme;
+    }
+  },
   created() {
     this.active_item = this.$route.name;
+    this.value = this.activeTheme;
   },
   methods: {
-    switchTheme(value) {
-      this.$cookies.set("__at-es", value, { maxAge: 30*30*60, path: "/" });
-      //var loader = document.querySelector('.ui.vertical.segment');
-      if (this.active != true) {
-        this.active = true; 
-        //loader.classList.add('loading');
-        this.$router.go();
-      }
+    async switchTheme(value) {
+      await this.$store.dispatch("changeTheme", value);
+      //
     },
     isActive(item) {
       return this.active_item == item ? true : false;
@@ -165,5 +165,4 @@ export default {
 </script>
 
 <style lang="css" scoped>
-
 </style>

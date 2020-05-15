@@ -1,5 +1,5 @@
 <template>
-  <sui-segment class="placeholder" :class="{inverted: this.$cookie.get('__at-es') === 'true' ? true : false }">
+  <sui-segment class="placeholder" :class="{inverted: activeTheme ? true : false }">
     <sui-header class="icon">
       <sui-icon name="chrome"></sui-icon>O-oo-ops!
     </sui-header>
@@ -12,6 +12,14 @@ export default {
   head() {
     return {
     title: "Error"
+    }
+  },
+  computed: {
+    activeAlert() {
+      return this.$store?.getters?.alert; 
+    },
+    activeTheme() {
+      return this.$store?.getters?.theme;
     }
   },
   methods: {

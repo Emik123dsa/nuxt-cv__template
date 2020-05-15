@@ -1,5 +1,5 @@
 <template>
-    <div class="ui placeholder" :class="{inverted: this.$cookie.get('__at-es') === 'true' ? true : false}">
+    <div class="ui placeholder" :class="{inverted: activeTheme ? true : false}">
       <div class="image header">
         <div class="line"></div>
         <div class="line"></div>
@@ -18,7 +18,15 @@
 export default {
   props: {
     loading: Boolean
-  }
+  },
+  computed: {
+    activeAlert() {
+      return this.$store?.getters?.alert; 
+    },
+    activeTheme() {
+      return this.$store?.getters?.theme;
+    }
+  },
 };
 </script>
 

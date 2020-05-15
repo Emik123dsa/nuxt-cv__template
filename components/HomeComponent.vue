@@ -1,13 +1,13 @@
 <template>
   <div
     class="ui segment placeholder"
-    :class="{inverted: this.$cookies.get('__at-es') ? true : false }"
+    :class="{inverted: activeTheme ? true : false }"
   >
     <sui-grid class="two column stackable center aligned">
-      <sui-divider :class="{inverted: this.$cookies.get('__at-es') ? true : false }" vertical>&</sui-divider>
+      <sui-divider :class="{inverted: activeTheme ? true : false }" vertical>&</sui-divider>
       <sui-grid-row class="aligned middle">
         <sui-grid-column>
-          <sui-header :class="{inverted: this.$cookies.get('__at-es') ? true : false }" icon>
+          <sui-header :class="{inverted: activeTheme ? true : false }" icon>
             <sui-icon name="pdf file" class="outline"></sui-icon>Web & Developer
           </sui-header>
           <div class="field">
@@ -16,7 +16,7 @@
                 <input class="prompt" type="text" placeholder="Find something here" />
                 <i
                   class="search icon"
-                  :class="{blue: this.$cookies.get('__at-es')  ? true : false }"
+                  :class="{blue: activeTheme  ? true : false }"
                 ></i>
               </div>
               <div class="results"></div>
@@ -24,13 +24,13 @@
           </div>
         </sui-grid-column>
         <sui-grid-column>
-          <sui-header :class="{inverted: this.$cookies.get('__at-es') ? true : false }" icon>
+          <sui-header :class="{inverted: activeTheme ? true : false }" icon>
             <sui-icon name="freebsd"></sui-icon>
             {{ text }}
           </sui-header>
           <div class="field">
             <sui-button
-              :class="{inverted: this.$cookies.get('__at-es') ? true : false }"
+              :class="{inverted: activeTheme ? true : false }"
               color="blue"
               @click.native="pushAbout()"
             >Let's get started</sui-button>
@@ -48,12 +48,19 @@ export default {
       text: "Emil Shari"
     };
   },
-  created() {},
+  computed: {
+    activeAlert() {
+      return this.$store?.getters?.alert; 
+    },
+    activeTheme() {
+      return this.$store?.getters?.theme;
+    }
+  },
   head() {
     return { 
       title: 'Home',
     }
-    },
+  },
   methods: {
     pushAbout() {
       this.$router.push('/about');

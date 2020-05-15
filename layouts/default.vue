@@ -6,15 +6,15 @@
     <div
       ref="active"
       class="bg-pusher"
-      :class="{'bg-pusher__background': this.$cookies.get('__at-es')}"
+      :class="{'bg-pusher__background': activeTheme}"
     ></div>
     <div class="pusher pusher__wrapper">
       <sui-segment stripe vertical>
         <sui-container text>
           <Header />
-          <sui-segment attached :class="{inverted: this.$cookies.get('__at-es')}"></sui-segment>
+          <sui-segment attached :class="{inverted: activeTheme}"></sui-segment>
           <transition name="slide-fade">
-            <sui-segment attached :class="{inverted: this.$cookies.get('__at-es')}">
+            <sui-segment attached :class="{inverted: activeTheme}">
               <section class="pusher__menu pusher-context">
                 <nuxt />
               </section>
@@ -38,6 +38,11 @@ export default {
     Header, 
     Footer, 
     Alert
+  },
+  computed: {
+  activeTheme() {
+      return this.$store?.getters?.theme;
+    }
   }
 }
 </script>
