@@ -3,7 +3,7 @@
     <sui-header class="icon">
       <sui-icon name="chrome"></sui-icon>O-oo-ops!
     </sui-header>
-    <sui-button color="blue" @click.prevent="pushToBack()" >Return to the back page</sui-button>
+    <sui-button color="blue" @click.prevent="pushToBack()">Return to the back page</sui-button>
   </sui-segment>
 </template>
 
@@ -11,22 +11,27 @@
 export default {
   head() {
     return {
-    title: "Error"
-    }
+      title: 'Error',
+    };
   },
   computed: {
     activeAlert() {
-      return this.$store?.getters?.alert; 
+      return this.$store?.getters?.alert;
     },
     activeTheme() {
       return this.$store?.getters?.theme;
-    }
+    },
   },
   methods: {
     pushToBack() {
-      this.$router.push("/")
-    }
-  }
+      this.$router.push('/');
+    },
+  },
+  head() {
+    return {
+      title: 'CV | Error Occured!',
+    };
+  },
 };
 </script>
 

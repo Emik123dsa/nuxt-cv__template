@@ -14,7 +14,7 @@
             </span>
             <sui-dropdown-menu>
               <sui-dropdown-item
-                v-for="(feature, i) in features"
+                v-for="(feature, i) in menuFeatures"
                 :key="i"
                 @click.prevent="switchFeatures(feature.path)"
               >
@@ -25,16 +25,24 @@
           </sui-dropdown-item>
           <sui-dropdown-divider />
           <sui-dropdown-header>Socials</sui-dropdown-header>
-          <sui-dropdown-item v-for="(social, i) in socials" :key="i" :to="`${social.path}`">
+          <a
+            v-for="(social,i)  in menuSocials"
+            :key="i"
+            class="item"
+            target="_blank"
+            :href="`https://${social.path}`"
+            rel="noopener noreferrer"
+          >
             <sui-icon size="mini" :name="`${social.img}`" link />
+
             {{social.name}}
-          </sui-dropdown-item>
+          </a>
         </sui-dropdown-menu>
       </sui-dropdown>
 
       <router-link
         is="sui-menu-item"
-        v-for="(item, i) in items"
+        v-for="(item, i) in menuItems"
         :key="i"
         :class="{active: isActive(item.name)}"
         :to="`${item.path}`"
@@ -59,90 +67,43 @@
 export default {
   data() {
     return {
-      items: [
-        {
-          name: "Home",
-          path: "/"
-        },
-        {
-          name: "Projects",
-          path: "/projects"
-        },
-        {
-          name: "Socials",
-          path: "/socials"
-        },
-        {
-          name: "Skills",
-          path: "/skills"
-        },
-        {
-          name: "Testimonial",
-          path: "/testimonial"
-        }
-      ],
-      features: [
-        {
-          name: "About me",
-          path: "/about"
-        },
-        {
-          name: "Personal",
-          path: "/personal"
-        },
-        {
-          name: "Contact me",
-          path: "/feedback"
-        },
-        {
-          name: "Socials",
-          path: "/socials"
-        },
-        {
-          name: "Testimonial",
-          path: "/testimonial"
-        }
-      ],
-      socials: [
-        {
-          name: "GitHub",
-          path: "/github",
-          img: "github"
-        },
-        {
-          name: "LinkedIn",
-          path: "/linkedin",
-          img: "linkedin"
-        },
-        {
-          name: "Xing",
-          path: "/xing",
-          img: "xing"
-        },
-        {
-          name: "Stack Overflow",
-          path: "/stackoverflow",
-          img: "stack overflow"
-        }
-      ],
-      activeItem: "",
-      active_item: "",
-      value: "",
-      active: false
+      activeItem: '',
+      active_item: '',
+      value: '',
+      active: false,
     };
   },
   computed: {
     activeTheme() {
       return this.$store?.getters?.theme;
-    }
+    },
+    menus() {
+      return this.$store?.getters?.menus;
+    },
+    menuItems() {
+      return this.menus.filter(i => {
+        return i.parent === 'items';
+      });
+    },
+    menuFeatures() {
+      return this.menus.filter(i => {
+        return i.parent === 'features';
+      });
+    },
+    menuSocials() {
+      return this.menus.filter(i => {
+        return i.parent === 'socials';
+      });
+    },
   },
+
   created() {
     this.active_item = this.$route.name;
     this.value = this.activeTheme;
   },
   methods: {
     async switchTheme(value) {
-      await this.$store.dispatch("changeTheme", value);
+      await this.$store.dispatch('changeTheme', value);
       //
     },
     isActive(item) {
@@ -152,15 +113,11 @@ export default {
       this.active_item = item;
     },
     switchFeatures(item) {
-      
       if (this.$route.path !== item) {
         this.$router.push(item);
       }
-    }
+    },
   },
-  mounted() {
-    //console.log(this.$route);
-  }
 };
 </script>
 

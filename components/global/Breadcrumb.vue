@@ -1,23 +1,15 @@
 <template>
   <div>
-    <sui-breadcrumb v-if="breadcrumbs == 1">
-      <sui-breadcrumb-section active>{{breadcrumbFilter[0].meta.breadcrumb}}</sui-breadcrumb-section>
-    </sui-breadcrumb>
-    <sui-breadcrumb v-else>
-      <sui-breadcrumb-section 
-      v-for="(breadcrumb, it) in breadcrumbBegin" 
-      :key="it" 
-      @click.native="switchToBack(breadcrumb.path)"
-      link>
-        {{breadcrumb.meta.breadcrumb}}
-        <sui-breadcrumb-divider v-if="it < breadcrumbs - 1" />
+    <sui-breadcrumb>
+      <sui-breadcrumb-section>
+        <nuxt-link
+          :to="breadcrumbs.path.replace(`${!!breadcrumbs.params.id ? '/' + breadcrumbs.params.id : ''}`, '')"
+        >{{lcfirst(breadcrumbs.name.replace('-id', ''))}}</nuxt-link>
       </sui-breadcrumb-section>
-
+      <sui-breadcrumb-divider v-if="!!breadcrumbs.params.id"></sui-breadcrumb-divider>
       <sui-breadcrumb-section
-        v-for="breadcrumb in breadcrumbEnd"
-        :key="breadcrumb.meta.breadcrumb"
         active
-      >{{lcfirst($route.params.id)}}</sui-breadcrumb-section>
+      >{{!!breadcrumbs.params.id ? lcfirst(breadcrumbs.params.id) : "" }}</sui-breadcrumb-section>
     </sui-breadcrumb>
   </div>
 </template>
@@ -26,18 +18,18 @@
 export default {
   data() {
     return {
-      breadEnd: ""
-    }
+      breadEnd: '',
+    };
   },
   computed: {
     breadcrumbs() {
-      return this.$breadcrumbs.length;
+      return this.$route;
     },
     breadcrumbFilter() {
       return this.$breadcrumbs;
     },
     breadcrumbBegin() {
-      return this.$breadcrumbs.filter((i) => {
+      return this.$breadcrumbs.filter(i => {
         if (i.name == undefined) {
           return i.meta.breadcrumb;
         }
@@ -49,7 +41,7 @@ export default {
           return i.meta.breadcrumb;
         }
       });
-    }
+    },
   },
   created() {
     this.breadEnd = this.lcfirst(this.$route.params.id);
@@ -61,19 +53,17 @@ export default {
       }
     },
     lcfirst(str) {
-      str += "";
+      str += '';
       var f = str.charAt(0).toUpperCase();
       return f + str.substr(1);
     },
     switchToBack(item) {
-      var delta = item.replace(":id", "", item);
+      var delta = item.replace(':id', '', item);
 
       this.$router.push(delta);
-    }
+    },
   },
-  mounted() {
-    
-  }
+  mounted() {},
 };
 </script>
 

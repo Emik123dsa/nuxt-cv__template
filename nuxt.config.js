@@ -23,6 +23,7 @@ module.exports = {
   css: ["assets/vendor/_vendor.scss"
   ],
   plugins: [
+    { src: "~/plugins/global.js" },
     { src: "~/plugins/semantic-ui-vue.js" },
     { src: "~/plugins/vue-particles.js", ssr: false }
   ],

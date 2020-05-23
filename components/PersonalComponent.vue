@@ -1,11 +1,38 @@
 <template>
- <div>
-     404
- </div>
+  <div v-if="!loading" v-html="personal.content
+   "></div>
+  <lazy-loading v-else />
 </template>
 
 <script>
-export default {};
+import LazyLoading from './LazyLoading';
+export default {
+  data() {
+    return {
+      loading: true,
+    };
+  },
+  components: {
+    LazyLoading,
+  },
+  mounted() {
+    new Promise((res, rej) => {
+      setTimeout(() => {
+        this.loading = false;
+      }, 500);
+    });
+  },
+  head() {
+    return {
+      title: 'CV | Personal',
+    };
+  },
+  computed: {
+    personal() {
+      return this.$store?.getters?.menu_default;
+    },
+  },
+};
 </script>
 
 <style>

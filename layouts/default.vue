@@ -12,7 +12,9 @@
       <sui-segment stripe vertical>
         <sui-container text>
           <Header />
-          <sui-segment attached :class="{inverted: activeTheme}"></sui-segment>
+          <sui-segment attached :class="{inverted: activeTheme}">
+            <Breadcrumb />
+          </sui-segment>
           <transition name="slide-fade">
             <sui-segment attached :class="{inverted: activeTheme}">
               <section class="pusher__menu pusher-context">
@@ -32,12 +34,13 @@
 import Header from "~/components/header/HeaderComponent";
 import Footer from "~/components/footer/FooterComponent";
 import Alert from "~/components/AlertComponent";
-//import Breadcrumb from "./components/global/Breadcrumb";
+import Breadcrumb from "~/components/global/Breadcrumb";
 export default {
   components: {
     Header, 
     Footer, 
-    Alert
+    Alert,
+    Breadcrumb
   },
   computed: {
   activeTheme() {

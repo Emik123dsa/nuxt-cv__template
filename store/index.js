@@ -1,3 +1,5 @@
+import qs from 'qs';
+
 export const state = () => ({
   apiBaseUrl: 'http://127.0.0.1/api/',
   allSkills: '',
@@ -7,6 +9,13 @@ export const state = () => ({
   alert: '',
   authToken: '',
   uuid: '',
+  menus: [],
+  menu_default: [],
+  cover: {
+    name: '',
+    email: '',
+    context: ''
+  }
 });
 
 export const getters = {
@@ -16,6 +25,9 @@ export const getters = {
   theme: (s) => s.theme,
   alert: (s) => s.alert,
   authToken: (s) => s.authToken,
+  menus: (s) => s.menus,
+  menu_default: (s) => s.menu_default,
+  cover: (s) => s.cover
 };
 export const mutations = {
   setActiveTheme(state, theme) {
@@ -45,6 +57,27 @@ export const mutations = {
   clearAboutFeatures(state) {
     state.aboutFeatures = [];
   },
+  setMenuFeatures(state, menus) {
+    state.menus = menus;
+  },
+  setMenuDefault(state, menu) {
+    state.menu_default = menu;
+  },
+  setProfile(state, { data, feature }) {
+    switch (feature) {
+      case "name":
+        state.cover.name = data;
+        break;
+      case "email":
+        state.cover.email = data;
+        break;
+      case "context":
+        state.cover.context = data;
+        break;
+      default:
+        break;
+    }
+  }
 };
 export const actions = {
   async nuxtServerInit({ commit, dispatch }, { error, app, res, req, isDev, query }) {
@@ -65,7 +98,6 @@ export const actions = {
         path: '/',
       });
     }
-
     if (!__uuid) {
       const { v4: uuidv4 } = require('uuid');
       let __UUID = uuidv4();
@@ -79,9 +111,12 @@ export const actions = {
     commit('setUUID', __uuid);
     commit('setActiveTheme', d);
     commit('setAlertDown', d_alert);
-
+    //await dispatch("loadAbout")
     try {
-      await Promise.all([]);
+      await Promise.all([
+        dispatch('loadSkills'),
+        dispatch('loadMenuFeatures')
+      ]);
     } catch (e) {
       error({
         statusCode: 500,
@@ -89,18 +124,17 @@ export const actions = {
       });
     }
   },
-  async apiRequest({ state }, { method, url, baseUrl, params = {}, data }) {
+  async apiRequest({ state }, { method, url, baseURL, params = {}, data = {} }) {
     let config = {
-      method: method || 'get',
-      baseUrl: baseUrl || state.apiBaseUrl,
+      method: method || "get",
+      baseURL: baseURL || state.apiBaseUrl,
       url: url,
       headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
+        "Content-Type": "application/x-www-form-urlencoded",
       },
       params: {
-        lang: 'en',
-        platform: 'site',
-        device: state.uuid,
+        lang: "ru",
+        device_platform: "site",
         ...params,
       },
     };
@@ -109,31 +143,54 @@ export const actions = {
       config.params.token = state.authToken;
     }
 
-    return new Promise((res, rej) => {
-      this.$axios(config)
-        .then((response) => res(response))
-        .catch((error) => rej(error));
-    });
+    if (data) {
+      config.data = qs.stringify(data);
+    }
+
+    const response = await this.$axios(config);
+    return response?.data;
+  },
+  async setDataStore({ commit }, { data, feature}) {
+
+    commit("setProfile", { data, feature });
+  },
+  async loadMenuDefault({ dispatch, commit }, id) {
+    const response = await dispatch('apiRequest', {
+      url: 'todos',
+      params: {
+        todo: id
+      }
+    })
+
+    commit("setMenuDefault", response);
+
+  },
+  async loadMenuFeatures({ dispatch, commit }) {
+    const response = await dispatch('apiRequest', {
+      url: 'menu-features'
+    })
+
+    commit("setMenuFeatures", response.data);
   },
   async loadSkills({ dispatch, commit }) {
     const response = await dispatch('apiRequest', {
       url: 'skills',
     });
-    commit('setSkills', response);
+    commit('setSkills', response.data);
   },
   async loadSkillCards({ dispatch, commit }) {
     const response = await dispatch('apiRequest', {
       url: 'skill-cards',
     });
 
-    commit('setSkillCards', response);
+    commit('setSkillCards', response.data);
   },
   async loadAbout({ dispatch, commit }) {
     const response = await dispatch('apiRequest', {
       url: 'about',
     });
 
-    commit('setAboutFeatures', response);
+    commit('setAboutFeatures', response.data);
   },
   async removeAlertCookie({ commit }) {
     if (!!this.$cookies.get('__alert-active')) {
@@ -146,14 +203,12 @@ export const actions = {
 
     return;
   },
-  changeTheme({ commit }, value) {
-    
-      this.$cookies.set('__at-es', value, {
-        maxAge: 60 * 60 * 24 * 31 * 12,
-        path: '/',
-      });
+  async changeTheme({ commit }, value) {
+    this.$cookies.set('__at-es', value, {
+      maxAge: 60 * 60 * 24 * 31 * 12,
+      path: '/',
+    });
+    commit('setActiveTheme', value);
 
-      commit('setActiveTheme', value);
-    
   },
 };

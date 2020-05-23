@@ -68,32 +68,57 @@
         <sui-header-subheader>Default skills</sui-header-subheader>
       </sui-header-content>
     </h4>
+    <sui-card-group :items-per-row="3" class="link" v-if="!loading">
+      <sui-card
+        v-for="(card ,i) in defaultCards"
+        :key="i"
+        class="link"
+        @click.native="switchToSkill(card.link)"
+      >
+        <sui-card-content>
+          <div class="right floated">
+            <sui-icon :name="`${card.icon}`" :color="`${card.color}`"></sui-icon>
+          </div>
+          <sui-card-header>{{ card.name }}</sui-card-header>
+          <sui-card-meta>Find out about {{ card.name }}</sui-card-meta>
+          <sui-card-description></sui-card-description>
+        </sui-card-content>
+        <sui-button attached="bottom">
+          <sui-icon name="book" :color="`${card.color}`"></sui-icon>Read more
+        </sui-button>
+      </sui-card>
+    </sui-card-group>
+    <div v-else>
+      <lazy-card-loading />
+    </div>
   </div>
 </template>
 
 <script>
-import LazyCardLoading from "./global/LazyCardLoading.vue";
+import LazyCardLoading from './global/LazyCardLoading.vue';
 
 export default {
   components: {
-    LazyCardLoading
+    LazyCardLoading,
   },
   data() {
     return {
       skill_cards: [],
-      loading: true
+      loading: true,
     };
   },
 
-  metaInfo: {
-    title: "Skills"
+  head() {
+    return {
+      title: 'CV | Skills',
+    };
   },
   created() {
     this.getSkillCards();
   },
   computed: {
     activeAlert() {
-      return this.$store?.getters?.alert; 
+      return this.$store?.getters?.alert;
     },
     activeTheme() {
       return this.$store?.getters?.theme;
@@ -101,30 +126,39 @@ export default {
 
     frontCards() {
       return this.skill_cards.filter(function(item) {
-        return item.parent === "card_front";
+        return item.parent === 'card_front';
+      });
+    },
+    defaultCards() {
+      return this.skill_cards.filter(function(item) {
+        return item.parent === 'card_default';
       });
     },
     backCards() {
       return this.skill_cards.filter(function(item) {
-        return item.parent === "card_back";
+        return item.parent === 'card_back';
       });
-    }
+    },
   },
   methods: {
     switchToSkill(item) {
       this.$router.push(item);
     },
-    async getSkillCards() {
+    getSkillCards() {
       this.loading = true;
-      await this.$store.dispatch("loadSkillCards");
-
-      this.loading = false;
-
-      this.skill_cards = !!this.$store.getters.skillCards.data.data
-        ? this.$store.getters.skillCards.data.data
-        : "";
-    }
-  }
+      new Promise((res, rej) => {
+        setTimeout(() => {
+          this.loading = false;
+          this.skill_cards = !!this.$store.getters.skillCards ? this.$store.getters.skillCards : '';
+        }, 500);
+      });
+    },
+  },
+  head() {
+    return {
+      title: 'CV | Skills',
+    };
+  },
 };
 </script>
 

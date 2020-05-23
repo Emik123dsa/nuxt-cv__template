@@ -1,13 +1,13 @@
 <template>
-  <testimonial-component />
+  <personal-component></personal-component>
 </template>
 
 <script>
-import TestimonialComponent from '@/components/TestimonialComponent';
+import PersonalComponent from '@/components/PersonalComponent';
 
 export default {
   components: {
-    TestimonialComponent,
+    PersonalComponent,
   },
   async asyncData({ route, store, query, params }) {
     await store.dispatch('loadMenuDefault', route.name);

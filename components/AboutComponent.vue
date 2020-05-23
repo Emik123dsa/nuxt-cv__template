@@ -1,24 +1,14 @@
 <template>
   <sui-item-group divided v-if="!loading" class="card-animation-wrapper">
     <sui-item>
-      <sui-item-image
-        v-if="this.$cookie.get('__at-es') === 'false' ? true : false"
-        size="small"
-        class="photo_feature"
-        src
-      />
+      <sui-item-image v-if="activeTheme ? false : true" size="small" class="photo_feature" src />
       <sui-item-content>
-        <sui-item-header
-          v-bind:style="{color: this.$cookie.get('__at-es') === 'true' && '#fff'}"
-        >Emil Shari</sui-item-header>
+        <sui-item-header v-bind:style="{color: activeTheme ? '#fff' : ''}">Emil Shari</sui-item-header>
         <sui-item-meta>
-          <span
-            class="price"
-            v-bind:style="{color: this.$cookie.get('__at-es') === 'true' && '#fff'}"
-          >Web & Developer</span>
+          <span class="price" v-bind:style="{color: activeTheme ? '#fff' : ''}">Web & Developer</span>
         </sui-item-meta>
         <sui-item-description>
-          <p v-bind:style="{color: this.$cookie.get('__at-es') === 'true' && '#fff'}">
+          <p v-bind:style="{color: activeTheme ? '#fff' : ''}">
             Hello! My name is Emil.
             <br />I'm being a Full Stack Web Developer.
             <br />I'm experienced with essential strides of the commercial/self projects building and serving.
@@ -28,10 +18,7 @@
       </sui-item-content>
     </sui-item>
     <sui-item>
-      <h3
-        is="sui-header"
-        :class="{inverted: this.$cookie.get('__at-es') === 'true' ? true : false }"
-      >
+      <h3 is="sui-header" :class="{inverted: activeTheme ? true : false }">
         <sui-icon name="linux" />
         <sui-header-content>
           Programming stack:
@@ -40,7 +27,7 @@
       </h3>
     </sui-item>
     <sui-item>
-      <sui-list :class="{inverted: this.$cookie.get('__at-es') === 'true' ? true : false }">
+      <sui-list :class="{inverted: activeTheme ? true : false }">
         <sui-item>
           <sui-icon name="folder" color="blue"></sui-icon>
           <sui-item-content>
@@ -72,13 +59,10 @@
             </sui-list>
           </sui-item-content>
         </sui-item>
-
         <sui-item>
           <sui-item-content>
             <sui-list>
-              <sui-item 
-              v-for="(item, i) in def" 
-              :key="i">
+              <sui-item v-for="(item, i) in def" :key="i">
                 <sui-icon size="large" :class="`${item.color}`" :name="`${item.img}`"></sui-icon>
                 <sui-item-content>
                   <sui-item-header>{{item.name}}</sui-item-header>
@@ -91,65 +75,71 @@
       </sui-list>
     </sui-item>
   </sui-item-group>
-  <div v-else> 
+  <div v-else>
     <lazy-loading />
   </div>
 </template>
 
 <script>
-import LazyLoading from "./LazyLoading";
+import LazyLoading from './LazyLoading';
 export default {
   components: {
-    LazyLoading
+    LazyLoading,
   },
   data() {
     return {
       loading: true,
-      about: ""
+      about: '',
     };
   },
   created() {
-    this.loadAbout();
+    this.getFetchAbout();
+  },
+  methods: {
+    getFetchAbout() {
+      new Promise((res, rej) => {
+        setTimeout(() => {
+          this.about = this.$store.getters?.aboutFeatures;
+          this.loading = false;
+        }, 500);
+      });
+    },
   },
   computed: {
     back() {
       return this.about.filter(function(item) {
-        return item.parent === "back";
+        return item.parent === 'back';
       });
     },
     front() {
       return this.about.filter(function(item) {
-        return item.parent === "front";
+        return item.parent === 'front';
       });
     },
     def() {
       return this.about.filter(function(item) {
-        return item.parent === "default";
+        return item.parent === 'default';
       });
-    }
-  },
-  methods: {
-    async loadAbout() {
-      this.loading = true;
-      await this.$store.dispatch("loadAbout");
-      var features = this.$store.getters.aboutFeatures;
-      this.about = !!features.data.data ? features.data.data : "";
-      this.loading = false;
-    }
+    },
+    activeAlert() {
+      return this.$store?.getters?.alert;
+    },
+    activeTheme() {
+      return this.$store?.getters?.theme;
+    },
   },
   head() {
     return {
-    title: "About Me"
-    }
-  }
+      title: 'CV | About Me',
+    };
+  },
 };
 </script>
 
 <style lang="scss" scoped>
 .photo {
   &_feature {
-    background: url("https://emilshari.github.io/img/photo_face.png") no-repeat
-      center center;
+    background: url('https://emilshari.github.io/img/photo_face.png') no-repeat center center;
     background-size: cover;
   }
 }
@@ -165,8 +155,7 @@ export default {
 }
 
 .webpack {
-  background: url("https://cdn.worldvectorlogo.com/logos/webpack.svg") no-repeat
-    center center;
+  background: url('https://cdn.worldvectorlogo.com/logos/webpack.svg') no-repeat center center;
   background-size: contain;
 }
 

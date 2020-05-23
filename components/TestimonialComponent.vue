@@ -1,14 +1,39 @@
 <template>
-  
+  <div v-if="!loading" v-html="testimonial.content
+   "></div>
+  <lazy-loading v-else />
 </template>
 
 <script>
+import LazyLoading from './LazyLoading';
 export default {
- metaInfo: {
-      title: 'Testimonial',
-    }
-}
+  data() {
+    return {
+      loading: true,
+    };
+  },
+  components: {
+    LazyLoading,
+  },
+  mounted() {
+    new Promise((res, rej) => {
+      setTimeout(() => {
+        this.loading = false;
+      }, 500);
+    });
+  },
+  head() {
+    return {
+      title: 'CV | Testimonial',
+    };
+  },
+  computed: {
+    testimonial() {
+      return this.$store?.getters?.menu_default;
+    },
+  },
+};
 </script>
 
-<style lang="scss">
+<style>
 </style>

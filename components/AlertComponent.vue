@@ -18,24 +18,24 @@
 export default {
   data() {
     return {
-      isActive: true
-    }
+      isActive: true,
+    };
   },
   computed: {
     activeAlert() {
-      return this.$store?.getters?.alert; 
+      return this.$store?.getters?.alert;
     },
     activeTheme() {
       return this.$store?.getters?.theme;
-    }
+    },
   },
   methods: {
     async removeAlert() {
-      let __alert_remove = false; 
-      await this.$store.dispatch("removeAlertCookie");
+      let __alert_remove = false;
+      await this.$store.dispatch('removeAlertCookie');
       this.isActive = false;
-    }
-  }
+    },
+  },
 };
 </script>
 

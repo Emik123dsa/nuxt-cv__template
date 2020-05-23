@@ -2,28 +2,16 @@
   <div>
     <sui-item-group divided class="card-animation-wrapper" v-if="!loading">
       <sui-item>
-        <h3
-          is="sui-header"
-          :class="{inverted: activeTheme ? true : false}"
-        >
+        <h3 is="sui-header" :class="{inverted: activeTheme ? true : false}">
           <sui-icon :name="`${skills.name}`" :class="`${skills.color}`" size="big" />
-          <sui-header-content
-            :class="{inverted: activeTheme ? true : false}"
-          >
+          <sui-header-content :class="{inverted: activeTheme ? true : false}">
             {{skills.title}}
-            <sui-header-subheader
-              :class="{inverted: activeTheme ? true : false}"
-            >{{skills.desc}}</sui-header-subheader>
+            <sui-header-subheader :class="{inverted: activeTheme ? true : false}">{{skills.desc}}</sui-header-subheader>
           </sui-header-content>
         </h3>
       </sui-item>
-      <sui-item
-        :style="{'border-top': activeTheme && '1px solid rgba(34,36,38,1)' }"
-      >
-        <h3
-          is="sui-header"
-          :class="{inverted: activeTheme ? true : false}"
-        >
+      <sui-item :style="{'border-top': activeTheme && '1px solid rgba(34,36,38,1)' }">
+        <h3 is="sui-header" :class="{inverted: activeTheme ? true : false}">
           <sui-icon name="linux" />
           <sui-header-content>
             About skill:
@@ -31,15 +19,10 @@
           </sui-header-content>
         </h3>
       </sui-item>
-      <sui-item
-        :style="{'border-top': activeTheme && '1px solid rgba(34,36,38,1)' }"
-      >
+      <sui-item :style="{'border-top': activeTheme && '1px solid rgba(34,36,38,1)' }">
         <sui-item-content>
           <sui-item-description :style="{color: activeTheme && '#fff'}">
-            <p
-              :style="{color: activeTheme ? true : false}"
-              v-html="skills.about"
-            ></p>
+            <p :style="{color: activeTheme ? true : false}" v-html="skills.about"></p>
           </sui-item-description>
         </sui-item-content>
       </sui-item>
@@ -49,16 +32,16 @@
 </template>
  
 <script>
-import LazyLoading from "./LazyLoading.vue";
+import LazyLoading from './LazyLoading.vue';
 //import { mapGetters, mapActions } from "vuex";
 export default {
   components: {
-    LazyLoading
+    LazyLoading,
   },
   data() {
     return {
-      skills: "",
-      loading: true
+      skills: '',
+      loading: true,
     };
   },
   created() {
@@ -66,51 +49,38 @@ export default {
   },
   computed: {
     activeAlert() {
-      return this.$store?.getters?.alert; 
+      return this.$store?.getters?.alert;
     },
     activeTheme() {
       return this.$store?.getters?.theme;
-    }
+    },
   },
   methods: {
-    async getSkills() {
+    getSkills() {
       this.loading = true;
+      let skills = this.$store.getters.skills;
 
-      const response = await this.$store.dispatch("loadSkills");
-
-      var skills = !!this.$store.getters.skills.data.data
-        ? this.$store.getters.skills.data.data
-        : "";
-        
-      if(this.getDataRedirect(skills)) {
-
-      Object.keys(skills).map(key => {
-        if (skills[key]["name"] === this.$route.params.id) {
-          this.skills = skills[key];
-        }
-      });  
-      } else {
-        if (this.$route.path !== "/404") {
-          this.$router.push("/404");
-        }
-      }
-
-      this.loading = false;
-    },
-    getDataRedirect(array) {
-      var quantity = 0;
-
-      Object.keys(array).map(key => {
-        if (array[key]['name'] == this.$route.params.id) {
-          ++quantity;
+      Object.keys(skills).map(it => {
+        if (skills[it].name === this.$route.params.id) {
+          this.skills = skills[it];
         }
       });
-      return quantity;
-    }
+
+      new Promise((res, rej) => {
+        setTimeout(() => {
+          this.loading = false;
+        }, 500);
+      });
+    },
   },
-  metaInfo: {
-    title: "My Vue Cv Project"
-  }
+  head() {
+    return {
+      title: 'CV | ' + this.skills.title,
+    };
+  },
+  mounted() {
+    //console.log(this.$router.params);
+  },
 };
 </script>
 

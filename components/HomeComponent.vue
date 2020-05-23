@@ -1,8 +1,5 @@
 <template>
-  <div
-    class="ui segment placeholder"
-    :class="{inverted: activeTheme ? true : false }"
-  >
+  <div class="ui segment placeholder" :class="{inverted: activeTheme ? true : false }">
     <sui-grid class="two column stackable center aligned">
       <sui-divider :class="{inverted: activeTheme ? true : false }" vertical>&</sui-divider>
       <sui-grid-row class="aligned middle">
@@ -13,13 +10,12 @@
           <div class="field">
             <div class="ui search">
               <div class="ui icon input">
-                <input class="prompt" type="text" placeholder="Find something here" />
-                <i
-                  class="search icon"
-                  :class="{blue: activeTheme  ? true : false }"
-                ></i>
+             <sui-button
+              :class="{inverted: activeTheme ? true : false }"
+              @click.native="push('feedback')"
+            >Hire me</sui-button>
               </div>
-              <div class="results"></div>
+             
             </div>
           </div>
         </sui-grid-column>
@@ -32,7 +28,7 @@
             <sui-button
               :class="{inverted: activeTheme ? true : false }"
               color="blue"
-              @click.native="pushAbout()"
+              @click.native="push('about')"
             >Let's get started</sui-button>
           </div>
         </sui-grid-column>
@@ -45,27 +41,27 @@
 export default {
   data() {
     return {
-      text: "Emil Shari"
+      text: 'Emil Shari',
     };
   },
   computed: {
     activeAlert() {
-      return this.$store?.getters?.alert; 
+      return this.$store?.getters?.alert;
     },
     activeTheme() {
       return this.$store?.getters?.theme;
-    }
+    },
   },
   head() {
-    return { 
-      title: 'Home',
-    }
+    return {
+      title: 'CV | Home',
+    };
   },
   methods: {
-    pushAbout() {
-      this.$router.push('/about');
-    }
-  }
+    push(item) {
+      this.$router.push(item);
+    },
+  },
 };
 </script>
 
