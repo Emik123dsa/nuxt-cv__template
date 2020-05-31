@@ -1,7 +1,7 @@
 import qs from 'qs';
 
 export const state = () => ({
-  apiBaseUrl: 'http://127.0.0.1/api/',
+  apiBaseUrl: 'https://emilshari.ru/api/',
   allSkills: '',
   skillCards: '',
   aboutFeatures: '',

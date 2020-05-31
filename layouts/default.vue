@@ -46,6 +46,40 @@ export default {
   activeTheme() {
       return this.$store?.getters?.theme;
     }
+  },
+  head() {
+  return {
+	title: "CV | Emil Shari", 
+	meta: [
+		{
+		name: "description", content: "Emil Shari resumse description, which is involving my essential features"
+		}, 
+		{
+		name: "og:locale", content: "EN"
+		}, 
+		{
+		name: "keywords", content: "about me, emil shari, presonal data, skills, nuxt.js, vue.js, self-development, php, laravel"
+		}, 
+		{
+		name: "og:type", content: "article"
+		},
+		{
+		name: "og:title", content: "CV | Emil Shari"
+		}, 
+		{
+		name: "og:description", content: "About my skills and life features"
+		}, 
+		{
+		name: "og:url", content: "https://emilshari.ru"
+		}, 
+		{
+		name: "og:image", content: "https://emilshari.ru/favicon.ico"
+		}, 
+		{
+		name: "og:site_name", content: "emilshari.ru"
+		}
+	]
+	}
   }
 }
 </script>
