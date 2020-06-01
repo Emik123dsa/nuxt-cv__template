@@ -61,7 +61,7 @@ export default {
       isDisabled: false,
       context: '',
       msg: '',
-      sucess: '',
+      success: '',
       error_name: false,
       error_context: false,
       error_email: false,
@@ -100,7 +100,7 @@ export default {
       e.preventDefault();
 
       this.msg = '';
-      this.sucess = '';
+      this.success = '';
       this.clearErrors();
 
       const response = await this.$store.dispatch('apiRequest', {

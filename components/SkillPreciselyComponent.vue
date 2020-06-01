@@ -10,7 +10,7 @@
           </sui-header-content>
         </h3>
       </sui-item>
-      <sui-item :style="{'border-top': activeTheme && '1px solid rgba(34,36,38,1)' }">
+      <sui-item :style="{'border-top': activeTheme ? '1px solid rgba(34,36,38,1)' : '' }">
         <h3 is="sui-header" :class="{inverted: activeTheme ? true : false}">
           <sui-icon name="linux" />
           <sui-header-content>
@@ -19,7 +19,7 @@
           </sui-header-content>
         </h3>
       </sui-item>
-      <sui-item :style="{'border-top': activeTheme && '1px solid rgba(34,36,38,1)' }">
+      <sui-item :style="{'border-top': activeTheme ? '1px solid rgba(34,36,38,1)' : '' }">
         <sui-item-content>
           <sui-item-description :style="{color: activeTheme && '#fff'}">
             <p :style="{color: activeTheme ? true : false}" v-html="skills.about"></p>

@@ -1,7 +1,7 @@
 import qs from 'qs';
 
 export const state = () => ({
-  apiBaseUrl: 'https://emilshari.ru/api/',
+  apiBaseUrl: 'http://80.249.147.24/api/',
   allSkills: '',
   skillCards: '',
   aboutFeatures: '',
@@ -80,7 +80,7 @@ export const mutations = {
   }
 };
 export const actions = {
-  async nuxtServerInit({ commit, dispatch }, { error, app, res, req, isDev, query }) {
+  async nuxtServerInit({ commit, dispatch, state }, { error, app }) {
     let d = app.$cookies.get('__at-es');
     let d_alert = app.$cookies.get('__alert-active');
     let __uuid = app.$cookies.get('__uuid');
@@ -112,6 +112,7 @@ export const actions = {
     commit('setActiveTheme', d);
     commit('setAlertDown', d_alert);
     //await dispatch("loadAbout")
+    
     try {
       await Promise.all([
         dispatch('loadSkills'),
@@ -147,11 +148,11 @@ export const actions = {
       config.data = qs.stringify(data);
     }
 
-    const response = await this.$axios(config);
+    let response = await this.$axios(config);
+
     return response?.data;
   },
-  async setDataStore({ commit }, { data, feature}) {
-
+  async setDataStore({ commit }, { data, feature }) {
     commit("setProfile", { data, feature });
   },
   async loadMenuDefault({ dispatch, commit }, id) {
@@ -160,7 +161,7 @@ export const actions = {
       params: {
         todo: id
       }
-    })
+    });
 
     commit("setMenuDefault", response);
 
@@ -173,9 +174,11 @@ export const actions = {
     commit("setMenuFeatures", response.data);
   },
   async loadSkills({ dispatch, commit }) {
+
     const response = await dispatch('apiRequest', {
       url: 'skills',
     });
+
     commit('setSkills', response.data);
   },
   async loadSkillCards({ dispatch, commit }) {
