@@ -19,7 +19,7 @@
     "nodemon": "^2.0.4",
     "nuxt": "^2.11.0",
     "object.values": "^1.1.1",
-    "qs": "^6.9.4",
+    "qs": "^6.9.7",
     "sass-loader": "^8.0.2",
     "semantic-ui-css": "^2.4.1",
     "semantic-ui-vue": "^0.10.1",
